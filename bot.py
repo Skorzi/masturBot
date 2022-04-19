@@ -3,13 +3,14 @@ import logging
 from telegram import Update
 from telegram.error import Unauthorized
 from telegram.ext.dispatcher import run_async
-from random import randint
+from random import randint, choice
 import db
 from datetime import datetime
 import time
 import pytz
 import asyncio
 import aioschedule
+import os
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -28,20 +29,75 @@ def start(update: Update, context: CallbackContext):
 
 
 def tellMe(update: Update, context: CallbackContext):
-    message = randDroch()
-    context.bot.send_message(chat_id=update._effective_chat.id, text=message)
+    message, img = randDroch()
+    # context.bot.send_animation(update._effective_chat.id, img, caption=message)
+    context.bot.send_animation(update._effective_chat.id, img, caption=message)
+    # context.bot.send_message(chat_id=update._effective_chat.id, text=message)
 
 def randDroch():
     rand = randint(0, 100)
     if rand < 50:
-        message = "NE DROCHIT` SEGONDYA"
+        message = "СЕГОДНЯ БЕЗ ДРОЧКИ!"
+        img = randGifNotCum()
     else:
-        message = "DROCHI SEGODNYA"
-    return message
+        message = "ВРЕМЯ ПОДРОЧИТЬ"
+        img = randGifLetCum()
+    return message, img
 
-def randGif():
-    pass
+def randGifNotCum():
+    gifList = [
+        "https://media.giphy.com/media/6yBdSRy2ZGRlsYULKl/giphy.gif",
+        "https://media.giphy.com/media/nzZemq7lGJeSKUPUb9/giphy.gif",
+        "https://media.giphy.com/media/C2rTKqcznowZMegiYo/giphy.gif",
+        "https://media.giphy.com/media/DkXrtqovA06Sc99Kx0/giphy.gif",
+        "https://media.giphy.com/media/tbFplpHgxc5sQWQcOR/giphy.gif",
+        "https://media.giphy.com/media/l11Wxd4oSTvlj8QXkl/giphy.gif",
+        "https://media.giphy.com/media/ifPcnMedf5Q646OCwK/giphy.gif",
+        "https://media.giphy.com/media/1v0jg6Kb3bjrNGTUjR/giphy.gif",
+        "https://media.giphy.com/media/M4FA173TvqcQmUjVNd/giphy.gif",
+        "https://media.giphy.com/media/KCGVl15EP8o6rBYEK5/giphy.gif",
+        "https://media.giphy.com/media/p5eKWnfyNkWkwtupHN/giphy.gif",
+        "https://media.giphy.com/media/9YChllnaoavCMeXctB/giphy.gif",
+        "https://media.giphy.com/media/Jik5S8XsNkSreLqrKQ/giphy.gif",
+        "https://media.giphy.com/media/bTCgtItQLVEadXyPmK/giphy.gif",
+        "https://media.giphy.com/media/n1e5mGXoxrq9LDqziw/giphy.gif",
+        "https://media.giphy.com/media/HjmrZRrgtLEPW1nPM4/giphy.gif",
+        "https://media.giphy.com/media/Qkr0155oVVzIyV0AbL/giphy.gif",
+        "https://media.giphy.com/media/Lt4UgDcISavQ5YuW9A/giphy.gif",
+        "https://media.giphy.com/media/SUdofmVviaeh9ZHt9G/giphy.gif",
+    ]
+    # img = choice(os.listdir("gifsNotMasturToday"))
+    # img = "gifsNotMasturToday/" + img
+    img = choice(gifList)
+    return img
 
+def randGifLetCum():
+    gifList = [
+        "https://media.giphy.com/media/RQkdFOrkM3mzLyDgHI/giphy.gif",
+        "https://media.giphy.com/media/r09bGyAq5hty6g9fIy/giphy.gif",
+        "https://media.giphy.com/media/MsAmFeyoWyomGRj0eR/giphy.gif",
+        "https://media.giphy.com/media/6A2hi95lgUNx60LWgH/giphy.gif",
+        "https://media.giphy.com/media/aDQbi5tQgq1Hvi3vsf/giphy.gif",
+        "https://media.giphy.com/media/3AI03XmuXAfFsdpJNc/giphy.gif",
+        "https://media.giphy.com/media/iK55OqQopZgEavJQgW/giphy.gif",
+        "https://media.giphy.com/media/aczNIbkcn4xVBYLjpa/giphy.gif",
+        "https://media.giphy.com/media/KSIi4Engldq7u6vtYa/giphy.gif",
+        "https://media.giphy.com/media/4kbF8pbEqaDgh6HiwP/giphy.gif",
+        "https://media.giphy.com/media/olpqjyOow12fOf511H/giphy.gif",
+        "https://media.giphy.com/media/JtgOpm347DnnyLY8rj/giphy.gif",
+        "https://media.giphy.com/media/mUhaY5dF7eIb16dodg/giphy.gif",
+        "https://media.giphy.com/media/3H1oQG40MRe2yOcODk/giphy.gif",
+        "https://media.giphy.com/media/Ol3VsLzgjQlc6NiMtP/giphy.gif",
+        "https://media.giphy.com/media/ep7973qv3xDAxTBhcM/giphy.gif",
+        "https://media.giphy.com/media/1V1QBXR2OsStf3gyrC/giphy.gif",
+        "https://media.giphy.com/media/jKBUIMSF9xTXtZI16r/giphy.gif",
+        "https://media.giphy.com/media/xyGifqV1H4n9vrlNuC/giphy.gif",
+        "https://media.giphy.com/media/tWf0HlPhLQbpIBrwOw/giphy.gif",
+    ]
+    # img = choice(os.listdir("gifsMasturToday"))
+    # img = "gifsMasturToday/" + img
+    img = choice(gifList)
+    return img
 #почему при переборе циклом происходит хуета?
 # это было из-за экзепшинов телеги
 #1460969666	18.04.22	19:54:27
@@ -66,10 +122,10 @@ def job(context):
                     format_now_time = datetime.strftime(now_time, "%H:%M:%S")
                     db.update_table_db(i[0], format_now_date, format_now_time)
 
-                    message = randDroch()
-                    gif = randGif()
+                    message, img = randDroch()
 
                     updater.bot.send_message(i[0], message)
+                    updater.bot.send_animation(i[0], img)
         except Unauthorized:
             db.delete_from_db(i[0])
 
