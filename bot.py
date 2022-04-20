@@ -22,17 +22,19 @@ dispatcher = updater.dispatcher
 
 
 def start(update: Update, context: CallbackContext):
-    text = 'False'
-    c_date, c_time = get_date().split()
-    print(type(update.effective_chat.id))
-    db.add_to_db(update.effective_chat.id, str(c_date), str(c_time))
+    try:
+        c_date, c_time = get_date().split()
+        db.add_to_db(update.effective_chat.id, str(c_date), str(c_time))
+        message, img = randDroch()
+        context.bot.send_animation(update._effective_chat.id, img, caption=message + "\n\nКаждые 24 часа вам будет приходить напоминалка о том дрочить ли сегодня?")
+    except:
+        context.bot.send_message(update._effective_chat.id, "Вам уже приходит напоминалка")
 
 
-def tellMe(update: Update, context: CallbackContext):
+
+def fapNow(update: Update, context: CallbackContext):
     message, img = randDroch()
-    # context.bot.send_animation(update._effective_chat.id, img, caption=message)
     context.bot.send_animation(update._effective_chat.id, img, caption=message)
-    # context.bot.send_message(chat_id=update._effective_chat.id, text=message)
 
 def randDroch():
     rand = randint(0, 100)
@@ -66,8 +68,6 @@ def randGifNotCum():
         "https://media.giphy.com/media/Lt4UgDcISavQ5YuW9A/giphy.gif",
         "https://media.giphy.com/media/SUdofmVviaeh9ZHt9G/giphy.gif",
     ]
-    # img = choice(os.listdir("gifsNotMasturToday"))
-    # img = "gifsNotMasturToday/" + img
     img = choice(gifList)
     return img
 
@@ -94,13 +94,9 @@ def randGifLetCum():
         "https://media.giphy.com/media/xyGifqV1H4n9vrlNuC/giphy.gif",
         "https://media.giphy.com/media/tWf0HlPhLQbpIBrwOw/giphy.gif",
     ]
-    # img = choice(os.listdir("gifsMasturToday"))
-    # img = "gifsMasturToday/" + img
     img = choice(gifList)
     return img
-#почему при переборе циклом происходит хуета?
-# это было из-за экзепшинов телеги
-#1460969666	18.04.22	19:54:27
+
 
 def job(context):
     users = db.search_db()
@@ -124,15 +120,44 @@ def job(context):
 
                     message, img = randDroch()
 
-                    updater.bot.send_message(i[0], message)
-                    updater.bot.send_animation(i[0], img)
+                    updater.bot.send_animation(i[0], img, caption=message)
+
         except Unauthorized:
             db.delete_from_db(i[0])
 
 def get_date():
     current_dt = datetime.now(pytz.timezone('Europe/Moscow')).strftime("%d.%m.%y %H:%M:%S")
     return current_dt
+#доделать прикол со стопом тип если уже не подписан отправить сообщение о том что он не подписан да
+#можно и на вдс пустить
+def stop(update: Update, context: CallbackContext):
+    users = db.search_db()
+    db.delete_from_db(update.effective_chat.id)
+    context.bot.send_message(update._effective_chat.id, "Вы отписались от напоминалок")
 
+
+
+
+def main() -> None:
+    """Start the bot."""
+    fapnow_handler = CommandHandler('fapnow', fapNow)
+    stop_handler = CommandHandler('stop', stop)
+    start_handler = CommandHandler('start', start)
+
+    dispatcher.add_handler(start_handler)
+    dispatcher.add_handler(fapnow_handler)
+    dispatcher.add_handler(stop_handler)
+
+
+    updater.job_queue.run_repeating(job, 3600)
+
+
+    updater.start_polling()
+    updater.idle()
+
+
+if __name__ == '__main__':
+    main()
 
 
 # по прежднему не работает асинхронно я пошел спать
@@ -151,28 +176,4 @@ def get_date():
 
 # dispatcher.run_async(scheduler())
 
-
-
-
-tellMe_handler = CommandHandler('tellMe', tellMe)
-
-start_handler = CommandHandler('start', start)
-
-dispatcher.add_handler(start_handler)
-dispatcher.add_handler(tellMe_handler)
-
-
-def scheduler():
-    aioschedule.every(3).seconds.do(job)
-    while True:
-        aioschedule.run_pending()
-        asyncio.sleep(1)
-
-
-updater.job_queue.run_repeating(job, 60)
-
-
-updater.start_polling()
-updater.idle()
-
-
+#1460969666	18.04.22	19:54:27
