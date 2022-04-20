@@ -106,7 +106,6 @@ def job(context):
     now_time = datetime.strptime(now_time, "%H:%M:%S")
     for i in users:
         try:
-            updater.bot.send_message(i[0], 'PRIVET')
             date = datetime.strptime(i[1], "%d.%m.%y")
             time = datetime.strptime(i[2], "%H:%M:%S")
 
