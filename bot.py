@@ -112,8 +112,9 @@ def job(context):
         try:
             date = i[0] + " " + i[1]
             date_dateType = datetime.strptime(date, "%d.%m.%y %H:%M:%S")
-
-            if(date_dateType <= now_all_dateType):
+            diffrent_btw_date = now_all_dateType - date_dateType
+            
+            if(int(diffrent_btw_date.days) >= 1):
                 format_now_date = datetime.strftime(now_date, "%d.%m.%y")
                 format_now_time = datetime.strftime(now_time, "%H:%M:%S")
                 db.update_table_db(i[0], format_now_date, format_now_time)
