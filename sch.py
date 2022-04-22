@@ -2,6 +2,9 @@ import asyncio
 import aioschedule
 from random import randint, choice
 import os
+import db
+from datetime import datetime
+import pytz
 
 # async def noon_print():
 #     print("It's noon!")
@@ -71,6 +74,47 @@ def func():
         img = choice(gifList)
     return message, img
 
+def job():
+    bug_fix_date = "22.04.22"
+    bug_fix_time = "22:15:22"
+    bug_fix_plus = bug_fix_date + " " + bug_fix_time
+    bug_fix_all = datetime.strptime(bug_fix_plus, "%d.%m.%y %H:%M:%S")
 
+    print(bug_fix_all)
+    print(type(bug_fix_all))
+    users = db.search_db()
+    now_all = get_date()
+    
+    now_date, now_time = now_all.split()
+    now_date = datetime.strptime(now_date, "%d.%m.%y")
+    now_time = datetime.strptime(now_time, "%H:%M:%S")
 
-print(func())
+    now_new_all = datetime.strptime(now_all, "%d.%m.%y %H:%M:%S")
+    diff = now_new_all - bug_fix_all
+    print(now_new_all)
+    print(bug_fix_all)
+    print(diff.days)
+    diff = int(diff.days)
+    print(diff)
+    print(type(diff))
+    
+
+    if diff:
+        print("fdfd")
+
+    # for i in users:
+    #     # date = datetime.strptime(i[1], "%d.%m.%y")
+    #     # time = datetime.strptime(i[2], "%H:%M:%S")
+    #     date = i[1] + " " + i[2]
+    #     date_reg_user = datetime.strptime(date, "%d.%m.%y %H:%M:%S")
+
+    #     if(diff):
+    #         format_now_date = datetime.strftime(now_date, "%d.%m.%y")
+    #         format_now_time = datetime.strftime(now_time, "%H:%M:%S")
+    #         db.update_table_db(i[0], format_now_date, format_now_time)
+
+def get_date():
+    current_dt = datetime.now(pytz.timezone('Europe/Moscow')).strftime("%d.%m.%y %H:%M:%S")
+    return current_dt
+
+job()

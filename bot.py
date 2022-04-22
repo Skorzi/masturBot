@@ -101,25 +101,25 @@ def randGifLetCum():
 def job(context):
     users = db.search_db()
     now_all = get_date()
+
     now_date, now_time = now_all.split()
     now_date = datetime.strptime(now_date, "%d.%m.%y")
     now_time = datetime.strptime(now_time, "%H:%M:%S")
+
+    now_all_dateType = datetime.strptime(now_all, "%d.%m.%y %H:%M:%S")
+
     for i in users:
         try:
-            date = datetime.strptime(i[1], "%d.%m.%y")
-            time = datetime.strptime(i[2], "%H:%M:%S")
-
-            diff_btw_dates = now_date - date
-
-            if(str(diff_btw_dates) == "1 day, 0:00:00"):
-                if(now_time <= time):
-                    format_now_date = datetime.strftime(now_date, "%d.%m.%y")
-                    format_now_time = datetime.strftime(now_time, "%H:%M:%S")
-                    db.update_table_db(i[0], format_now_date, format_now_time)
-
-                    message, img = randDroch()
-
-                    updater.bot.send_animation(i[0], img, caption=message)
+            date = i[0] + " " + i[1]
+            date_dateType = datetime.strptime(date, "%d.%m.%y %H:%M:%S")
+            diffrent_btw_date = now_all_dateType - date_dateType
+            
+            if(int(diffrent_btw_date.days) >= 1):
+                format_now_date = datetime.strftime(now_date, "%d.%m.%y")
+                format_now_time = datetime.strftime(now_time, "%H:%M:%S")
+                db.update_table_db(i[0], format_now_date, format_now_time)
+                message, img = randDroch()
+                updater.bot.send_animation(i[0], img, caption=message)
 
         except Unauthorized:
             db.delete_from_db(i[0])
@@ -133,8 +133,6 @@ def stop(update: Update, context: CallbackContext):
     users = db.search_db()
     db.delete_from_db(update.effective_chat.id)
     context.bot.send_message(update._effective_chat.id, "Вы отписались от напоминалок")
-
-
 
 
 def main() -> None:
