@@ -75,32 +75,25 @@ def func():
     return message, img
 
 def job():
-    bug_fix_date = "22.04.22"
-    bug_fix_time = "22:15:22"
-    bug_fix_plus = bug_fix_date + " " + bug_fix_time
-    bug_fix_all = datetime.strptime(bug_fix_plus, "%d.%m.%y %H:%M:%S")
-
-    print(bug_fix_all)
-    print(type(bug_fix_all))
     users = db.search_db()
     now_all = get_date()
-    
+
     now_date, now_time = now_all.split()
     now_date = datetime.strptime(now_date, "%d.%m.%y")
     now_time = datetime.strptime(now_time, "%H:%M:%S")
 
-    now_new_all = datetime.strptime(now_all, "%d.%m.%y %H:%M:%S")
-    diff = now_new_all - bug_fix_all
-    print(now_new_all)
-    print(bug_fix_all)
-    print(diff.days)
-    diff = int(diff.days)
-    print(diff)
-    print(type(diff))
-    
+    now_all_dateType = datetime.strptime(now_all, "%d.%m.%y %H:%M:%S")
 
-    if diff:
-        print("fdfd")
+    for i in users:
+        date = i[1] + " " + i[2]
+        date_dateType = datetime.strptime(date, "%d.%m.%y %H:%M:%S")
+        diffrent_btw_date = now_all_dateType - date_dateType
+        
+        if(int(diffrent_btw_date.days) >= 1):
+            format_now_date = datetime.strftime(now_date, "%d.%m.%y")
+            format_now_time = datetime.strftime(now_time, "%H:%M:%S")
+            # db.update_table_db(i[0], format_now_date, format_now_time)
+            print(i)
 
     # for i in users:
     #     # date = datetime.strptime(i[1], "%d.%m.%y")

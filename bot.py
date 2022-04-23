@@ -110,7 +110,7 @@ def job(context):
 
     for i in users:
         try:
-            date = i[0] + " " + i[1]
+            date = i[1] + " " + i[2]
             date_dateType = datetime.strptime(date, "%d.%m.%y %H:%M:%S")
             diffrent_btw_date = now_all_dateType - date_dateType
             
